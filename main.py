@@ -128,6 +128,16 @@ async def on_message(message):
     await bot.process_commands(message) # Przetwarza komendy, bez tego nie działają
 
 @bot.event
+async def on_message_delete(message):
+    # Pomija wiadomości wysłane przez siebie albo inne boty
+    if(message.author.bot):
+        return
+
+    print(f'[DELETED][SVR: {message.guild.name} #{message.channel}] @{message.author}: {message.content}')
+    with open('logs/deleted_message.log', mode='a', encoding="utf-8") as file:
+        file.write(f'SVR: {message.guild.name} #{message.channel}] @{message.author}: {message.content}\n')
+
+@bot.event
 async def on_command_error(error, ctx):
     print("-------------------------------------------------\nError:", error, "\nContext:", ctx, "\n-------------------------------------------------")
 
