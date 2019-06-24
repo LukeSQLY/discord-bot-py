@@ -103,6 +103,10 @@ async def givepermissions(ctx, id: int = 0):
 async def updatepresence(ctx, presence_type: int = 0, presence_text: str = ""):
     if ctx.message.author.id in settings['owners']:
         await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name=presence_text, type=presence_type))
+        settings['default_activity']['name'] = presence_text
+        settings['default_activity']['type'] = presence_type
+        with open('settings.yml', 'w') as stream:
+            yaml.safe_dump(settings, stream)
 
 #-----------------------------------------------------------------
 # BOT EVENTS
@@ -112,7 +116,7 @@ async def updatepresence(ctx, presence_type: int = 0, presence_text: str = ""):
 async def on_ready():
     print(f' > Uruchomiłem bota: {bot.user.name} w wersji {BOT_VER}')
     print(f' > UID bota to: {bot.user.id}')
-    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name=f'Wersja: {BOT_VER}', type=1))
+    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(name=settings['default_activity']['name'], type=settings['default_activity']['type']))
 
 @bot.event
 async def on_message(message):

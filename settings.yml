@@ -1,3 +1,6 @@
+default_activity:
+  name: example activity
+  type: 1
 owners:
 - 259003214790131722
 prefix: '!'
